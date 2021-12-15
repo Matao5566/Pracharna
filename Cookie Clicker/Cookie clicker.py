@@ -59,14 +59,22 @@ shopY = 80
 shop_icon = pygame.image.load('Shop.png')
 
 
-def Money(x, y):
-    money_value = font.render("Cookies : " + str(round(money, 3)), True, (150, 75, 0))
-    screen.blit(money_value, (moneyX, moneyY))
+def Money():
+    if money < 1000000:
+        money_value = font.render("Cookies : " + str(round(money)), True, (150, 75, 0))
+        screen.blit(money_value, (moneyX, moneyY))
+    elif money >= 1000000:
+        money_value = font.render("Cookies : " + str(round(money/1000000)) + "M", True, (150, 75, 0))
+        screen.blit(money_value, (moneyX, moneyY))
 
 
-def Score(x, y):
-    score_value = font.render("Score : " + str(score), True, (255, 255, 255))
-    screen.blit(score_value, (scoreX, scoreY))
+def Score():
+    if score < 1000000:
+        score_value = font.render("Score : " + str(score), True, (255, 255, 255))
+        screen.blit(score_value, (scoreX, scoreY))
+    elif score >= 1000000:
+        score_value = font.render("Score : " + str(score/1000000) + "M", True, (255, 255, 255))
+        screen.blit(score_value, (scoreX, scoreY))
 
 
 def Cookie():
@@ -79,7 +87,7 @@ def Shop():
 
 
 def Moneyadd():
-    moneyadd_value = font.render("Cookies per click: " + str(moneyadd), True, (255, 255, 255))
+    moneyadd_value = font.render("Cookies per click: " + str(round(moneyadd)), True, (255, 255, 255))
     screen.blit(moneyadd_value, (0, 700))
 
 
@@ -89,27 +97,39 @@ def Backtobakery():
 
 
 def Upgrade1():
-    upgrade1_value = font.render("<1> Babiččina volba (+1 Cookie per click) Price :" + str(round(upgrade1, 3)), True,
+    upgrade1_value = font.render("<1> Babiččina volba (+1 Cookie per click) Price :" + str(round(upgrade1)), True,
                                  (0, 255, 0))
     screen.blit(upgrade1_value, (0, 100))
 
 
 def Upgrade2():
-    upgrade2_value = font.render("<2> Sušenkové Mlsání (2x Cookies per click) Price :" + str(round(upgrade2, 3)), True,
+    upgrade2_value = font.render("<2> Sušenkové Mlsání (1.5x Cookies per click) Price :" + str(round(upgrade2)), True,
                                  (0, 255, 0))
     screen.blit(upgrade2_value, (0, 150))
 
 
 def Upgrade3():
-    upgrade3_value = font.render("<3> Mlsný jazýček (+100 Cookies per click) Price :" + str(round(upgrade3, 3)), True,
+    upgrade3_value = font.render("<3> Mlsný jazýček (+100 Cookies per click) Price :" + str(round(upgrade3)), True,
                                  (0, 255, 0))
     screen.blit(upgrade3_value, (0, 200))
 
 def Upgrade4():
-    upgrade4_value = font.render("<4> Dvojité sušenkové krabice (2x vaše cookies) Price :" + str(round(upgrade4, 3)),
+    upgrade4_value = font.render("<4> Dvojité sušenkové krabice (2x vaše cookies) Price :" + str(round(upgrade4)),
                                  True, (0, 255, 0))
     screen.blit(upgrade4_value, (0, 250))
 
+
+def update():
+    screen.blit(store, (0, 0))
+    Money()
+    Upgrade1()
+    Upgrade2()
+    Upgrade3()
+    Upgrade4()
+    Moneyadd()
+    Score()
+    Backtobakery()
+    pygame.display.update()
 
 # Game Loop
 running = True
@@ -133,15 +153,7 @@ while running:
                 data2.append([score, celkem])
             if event.key == pygame.K_RIGHT:
                 screen.blit(store, (0, 0))
-                Money(CookieX, CookieY)
-                Upgrade1()
-                Upgrade2()
-                Upgrade3()
-                Upgrade4()
-                Moneyadd()
-                Score(scoreX, scoreY)
-                Backtobakery()
-                pygame.display.update()
+                update()
                 while True:
                     event = pygame.event.wait()
                     if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
@@ -151,33 +163,15 @@ while running:
                             money -= upgrade1
                             upgrade1 += 10
                             moneyadd += 1
-                            screen.blit(store, (0, 0))
-                            Money(CookieX, CookieY)
-                            Upgrade1()
-                            Upgrade2()
-                            Upgrade4()
-                            Upgrade3()
-                            Score(scoreX, scoreY)
-                            Moneyadd()
-                            Backtobakery()
-                            pygame.display.update()
+                            update()
                         else:
                             continue
                     if event.type == pygame.KEYDOWN and event.key == pygame.K_2:
                         if money - upgrade2 >= 0:
                             money -= upgrade2
-                            upgrade2 += upgrade2
+                            upgrade2 += (upgrade2/2)
                             moneyadd += moneyadd
-                            screen.blit(store, (0, 0))
-                            Money(CookieX, CookieY)
-                            Upgrade2()
-                            Upgrade4()
-                            Upgrade1()
-                            Upgrade3()
-                            Score(scoreX, scoreY)
-                            Moneyadd()
-                            Backtobakery()
-                            pygame.display.update()
+                            update()
                         else:
                             continue
                     if event.type == pygame.KEYDOWN and event.key == pygame.K_3:
@@ -185,16 +179,7 @@ while running:
                             money -= upgrade3
                             upgrade3 += upgrade3
                             moneyadd += 100
-                            screen.blit(store, (0, 0))
-                            Money(CookieX, CookieY)
-                            Upgrade3()
-                            Upgrade4()
-                            Upgrade2()
-                            Upgrade1()
-                            Score(scoreX, scoreY)
-                            Moneyadd()
-                            Backtobakery()
-                            pygame.display.update()
+                            update()
                         else:
                             continue
                     if event.type == pygame.KEYDOWN and event.key == pygame.K_4:
@@ -202,16 +187,7 @@ while running:
                             money -= upgrade4
                             upgrade4 += upgrade4 * 2
                             moneyadd += money
-                            screen.blit(store, (0, 0))
-                            Money(CookieX, CookieY)
-                            Upgrade3()
-                            Upgrade4()
-                            Upgrade2()
-                            Upgrade1()
-                            Moneyadd()
-                            Score(scoreX, scoreY)
-                            Backtobakery()
-                            pygame.display.update()
+                            update()
                         else:
                             continue
                     else:
@@ -255,7 +231,7 @@ while running:
                 CookieY = 150
     Cookie()
     Shop()
-    Money(moneyX, moneyY)
-    Score(scoreX, scoreY)
+    Money()
+    Score()
     Moneyadd()
     pygame.display.update()
