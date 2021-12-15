@@ -18,7 +18,7 @@ CookieImg = pygame.image.load('bigcookie.png')
 CookieX = 600
 CookieY = 150
 CookieY_change = 0
-
+# zabí se
 # Background
 background = pygame.image.load('oven.png')
 # Store
