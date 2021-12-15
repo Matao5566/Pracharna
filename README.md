@@ -1,5 +1,4 @@
 I work all night, I work all day to pay the bills I have to pay
-
 Ain't it sad?
 And still there never seems to be a single penny left for me
 That's too bad
