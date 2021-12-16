@@ -73,7 +73,7 @@ def Score():
         score_value = font.render("Score : " + str(score), True, (255, 255, 255))
         screen.blit(score_value, (scoreX, scoreY))
     elif score >= 1000000:
-        score_value = font.render("Score : " + str(score/1000000) + "M", True, (255, 255, 255))
+        score_value = font.render("Score : " + str(score/10**6) + "Mil", True, (255, 255, 255))
         screen.blit(score_value, (scoreX, scoreY))
 
 
@@ -87,12 +87,16 @@ def Shop():
 
 
 def Moneyadd():
-    if moneyadd >= 1000000:
-        moneyadd_value = font.render("Cookies per click: " + str(round(moneyadd/1000000)) + "M", True, (255, 255, 255))
+    if moneyadd >= 10**6:
+        moneyadd_value = font.render("Cookies per click: " + str(round(moneyadd/10**6)) + "Mil", True, (255, 255, 255))
+        screen.blit(moneyadd_value, (0, 700))
+    elif moneyadd >= 10**9:
+        moneyadd_value = font.render("Cookies per click: " + str(round(moneyadd/(10**9))) + "Bil", True, (255, 255, 255))
         screen.blit(moneyadd_value, (0, 700))
     else:
         moneyadd_value = font.render("Cookies per click: " + str(round(moneyadd)), True, (255, 255, 255))
         screen.blit(moneyadd_value, (0, 700))
+
 
 def Backtobakery():
     bakery_value = font.render("To get back to bakery press <-", True, (255, 255, 255))
