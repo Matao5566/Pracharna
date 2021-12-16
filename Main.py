@@ -1,3 +1,3 @@
-import graphics
+# import graphics
 
 print("high track speed")
