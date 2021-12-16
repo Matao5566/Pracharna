@@ -73,7 +73,7 @@ def Score():
         score_value = font.render("Score : " + str(score), True, (255, 255, 255))
         screen.blit(score_value, (scoreX, scoreY))
     elif score >= 1000000:
-        score_value = font.render("Score : " + str(score/1000000) + "M", True, (255, 255, 255))
+        score_value = font.render("Score : " + str(score/10**6) + "Mil", True, (255, 255, 255))
         screen.blit(score_value, (scoreX, scoreY))
 
 
@@ -87,12 +87,70 @@ def Shop():
 
 
 def Moneyadd():
-    if moneyadd >= 1000000:
-        moneyadd_value = font.render("Cookies per click: " + str(round(moneyadd/1000000)) + "M", True, (255, 255, 255))
+    if moneyadd >= 10**6:
+        moneyadd_value = font.render("Cookies per click: " + str(round(moneyadd/10**6)) + "Mil", True, (255, 255, 255))
+        screen.blit(moneyadd_value, (0, 700))
+    elif moneyadd >= 10**9:
+        moneyadd_value = font.render("Cookies per click: " + str(round(moneyadd/(10**9))) + "Bil", True, (255, 255, 255))
+        screen.blit(moneyadd_value, (0, 700))
+    elif moneyadd >= 10**12:
+        moneyadd_value = font.render("Cookies per click: " + str(round(moneyadd/(10**12))) + "Tril", True, (255, 255, 255))
+        screen.blit(moneyadd_value, (0, 700))
+    elif moneyadd >= 10**15:
+        moneyadd_value = font.render("Cookies per click: " + str(round(moneyadd/(10**15))) + "Quadrill", True, (255, 255, 255))
+        screen.blit(moneyadd_value, (0, 700))
+    elif moneyadd >= 10**18:
+        moneyadd_value = font.render("Cookies per click: " + str(round(moneyadd/(10**18))) + "Quintill", True, (255, 255, 255))
+        screen.blit(moneyadd_value, (0, 700))
+    elif moneyadd >= 10**21:
+        moneyadd_value = font.render("Cookies per click: " + str(round(moneyadd/(10**21))) + "Sextill", True, (255, 255, 255))
+        screen.blit(moneyadd_value, (0, 700))
+    elif moneyadd >= 10**24:
+        moneyadd_value = font.render("Cookies per click: " + str(round(moneyadd/(10**24))) + "Septill", True, (255, 255, 255))
+        screen.blit(moneyadd_value, (0, 700))
+    elif moneyadd >= 10**27:
+        moneyadd_value = font.render("Cookies per click: " + str(round(moneyadd/(10**27))) + "Octill", True, (255, 255, 255))
+        screen.blit(moneyadd_value, (0, 700))
+    elif moneyadd >= 10**30:
+        moneyadd_value = font.render("Cookies per click: " + str(round(moneyadd/(10**30))) + "Nonill", True, (255, 255, 255))
+        screen.blit(moneyadd_value, (0, 700))
+    elif moneyadd >= 10**33:
+        moneyadd_value = font.render("Cookies per click: " + str(round(moneyadd/(10**33))) + "Decill", True, (255, 255, 255))
+        screen.blit(moneyadd_value, (0, 700))
+    elif moneyadd >= 10**36:
+        moneyadd_value = font.render("Cookies per click: " + str(round(moneyadd/(10**36))) + "Undecill", True, (255, 255, 255))
+        screen.blit(moneyadd_value, (0, 700))
+    elif moneyadd >= 10**39:
+        moneyadd_value = font.render("Cookies per click: " + str(round(moneyadd/(10**39))) + "Duodecill", True, (255, 255, 255))
+        screen.blit(moneyadd_value, (0, 700))
+    elif moneyadd >= 10**42:
+        moneyadd_value = font.render("Cookies per click: " + str(round(moneyadd/(10**42))) + "Tredecill", True, (255, 255, 255))
+        screen.blit(moneyadd_value, (0, 700))
+    elif moneyadd >= 10**45:
+        moneyadd_value = font.render("Cookies per click: " + str(round(moneyadd/(10**45))) + "Quattuordecill", True, (255, 255, 255))
+        screen.blit(moneyadd_value, (0, 700))
+    elif moneyadd >= 10**48:
+        moneyadd_value = font.render("Cookies per click: " + str(round(moneyadd/(10**48))) + "Quindecill", True, (255, 255, 255))
+        screen.blit(moneyadd_value, (0, 700))
+    elif moneyadd >= 10**51:
+        moneyadd_value = font.render("Cookies per click: " + str(round(moneyadd/(10**51))) + "Sexdecill", True, (255, 255, 255))
+        screen.blit(moneyadd_value, (0, 700))
+    elif moneyadd >= 10**54:
+        moneyadd_value = font.render("Cookies per click: " + str(round(moneyadd/(10**54))) + "Septendecill", True, (255, 255, 255))
+        screen.blit(moneyadd_value, (0, 700))
+    elif moneyadd >= 10**57:
+        moneyadd_value = font.render("Cookies per click: " + str(round(moneyadd/(10**57))) + "Octodecill", True, (255, 255, 255))
+        screen.blit(moneyadd_value, (0, 700))
+    elif moneyadd >= 10**60:
+        moneyadd_value = font.render("Cookies per click: " + str(round(moneyadd/(10**60))) + "Novemdecill", True, (255, 255, 255))
+        screen.blit(moneyadd_value, (0, 700))
+    elif moneyadd >= 10**63:
+        moneyadd_value = font.render("Cookies per click: " + str(round(moneyadd/(10**63))) + "Vigintill", True, (255, 255, 255))
         screen.blit(moneyadd_value, (0, 700))
     else:
         moneyadd_value = font.render("Cookies per click: " + str(round(moneyadd)), True, (255, 255, 255))
         screen.blit(moneyadd_value, (0, 700))
+
 
 def Backtobakery():
     bakery_value = font.render("To get back to bakery press <-", True, (255, 255, 255))
