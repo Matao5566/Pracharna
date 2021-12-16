@@ -87,9 +87,12 @@ def Shop():
 
 
 def Moneyadd():
-    moneyadd_value = font.render("Cookies per click: " + str(round(moneyadd)), True, (255, 255, 255))
-    screen.blit(moneyadd_value, (0, 700))
-
+    if moneyadd >= 1000000:
+        moneyadd_value = font.render("Cookies per click: " + str(round(moneyadd/1000000)) + "M", True, (255, 255, 255))
+        screen.blit(moneyadd_value, (0, 700))
+    else:
+        moneyadd_value = font.render("Cookies per click: " + str(round(moneyadd)), True, (255, 255, 255))
+        screen.blit(moneyadd_value, (0, 700))
 
 def Backtobakery():
     bakery_value = font.render("To get back to bakery press <-", True, (255, 255, 255))
