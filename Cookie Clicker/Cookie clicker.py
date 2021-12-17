@@ -65,70 +65,17 @@ shopY = 80
 shop_icon = pygame.image.load('Shop.png')
 
 
-def Money():
+def Money(i, values):
+    n = 63
+    while moneyadd <= 10 ** n:
+        n -= 3
+        i -= 1
     if money < 1000000:
         money_value = font.render("Cookies : " + str(round(money)), True, (150, 75, 0))
         screen.blit(money_value, (moneyX, moneyY))
-    elif money >= 10**6:
-        money_value = font.render("Cookies : " + str(round(money/10**6, 2)) + "M", True, (150, 75, 0))
+    elif money >= 1000000:
+        money_value = font.render("Cookies : " + str(round(money/10**n, 2)) + values[i], True, (150, 75, 0))
         screen.blit(money_value, (moneyX, moneyY))
-    elif money >= 10**9:
-        money_value = font.render("Cookies per click: " + str(round(money/(10**9), 2)) + "Bil", True, (255, 255, 255))
-        screen.blit(money_value, (0, 700))
-    elif money >= 10**12:
-        money_value = font.render("Cookies per click: " + str(round(money/(10**12), 2)) + "Tril", True, (255, 255, 255))
-        screen.blit(money_value, (0, 700))
-    elif money >= 10**15:
-        money_value = font.render("Cookies per click: " + str(round(money/(10**15), 2)) + "Quadrill", True, (255, 255, 255))
-        screen.blit(money_value, (0, 700))
-    elif money >= 10**18:
-        money_value = font.render("Cookies per click: " + str(round(money/(10**18), 2)) + "Quintill", True, (255, 255, 255))
-        screen.blit(money_value, (0, 700))
-    elif money >= 10**21:
-        money_value = font.render("Cookies per click: " + str(round(money/(10**21), 2)) + "Sextill", True, (255, 255, 255))
-        screen.blit(money_value, (0, 700))
-    elif money >= 10**24:
-        money_value = font.render("Cookies per click: " + str(round(money/(10**24), 2)) + "Septill", True, (255, 255, 255))
-        screen.blit(money_value, (0, 700))
-    elif money >= 10**27:
-        money_value = font.render("Cookies per click: " + str(round(money/(10**27), 2)) + "Octill", True, (255, 255, 255))
-        screen.blit(money_value, (0, 700))
-    elif money >= 10**30:
-        money_value = font.render("Cookies per click: " + str(round(money/(10**30), 2)) + "Nonill", True, (255, 255, 255))
-        screen.blit(money_value, (0, 700))
-    elif money >= 10**33:
-        money_value = font.render("Cookies per click: " + str(round(money/(10**33), 2)) + "Decill", True, (255, 255, 255))
-        screen.blit(money_value, (0, 700))
-    elif money >= 10**36:
-        money_value = font.render("Cookies per click: " + str(round(money/(10**36), 2)) + "Undecill", True, (255, 255, 255))
-        screen.blit(money_value, (0, 700))
-    elif money >= 10**39:
-        money_value = font.render("Cookies per click: " + str(round(money/(10**39), 2)) + "Duodecill", True, (255, 255, 255))
-        screen.blit(money_value, (0, 700))
-    elif money >= 10**42:
-        money_value = font.render("Cookies per click: " + str(round(money/(10**42), 2)) + "Tredecill", True, (255, 255, 255))
-        screen.blit(money_value, (0, 700))
-    elif money >= 10**45:
-        money_value = font.render("Cookies per click: " + str(round(money/(10**45), 2)) + "Quattuordecill", True, (255, 255, 255))
-        screen.blit(money_value, (0, 700))
-    elif money >= 10**48:
-        money_value = font.render("Cookies per click: " + str(round(money/(10**48), 2)) + "Quindecill", True, (255, 255, 255))
-        screen.blit(money_value, (0, 700))
-    elif money >= 10**51:
-        money_value = font.render("Cookies per click: " + str(round(money/(10**51), 2)) + "Sexdecill", True, (255, 255, 255))
-        screen.blit(money_value, (0, 700))
-    elif money >= 10**54:
-        money_value = font.render("Cookies per click: " + str(round(money/(10**54), 2)) + "Septendecill", True, (255, 255, 255))
-        screen.blit(money_value, (0, 700))
-    elif money >= 10**57:
-        money_value = font.render("Cookies per click: " + str(round(money/(10**57), 2)) + "Octodecill", True, (255, 255, 255))
-        screen.blit(money_value, (0, 700))
-    elif money >= 10**60:
-        money_value = font.render("Cookies per click: " + str(round(money/(10**60), 2)) + "Novemdecill", True, (255, 255, 255))
-        screen.blit(money_value, (0, 700))
-    elif money >= 10**63:
-        money_value = font.render("Cookies per click: " + str(round(money/(10**63), 2)) + "Vigintill", True, (255, 255, 255))
-        screen.blit(money_value, (0, 700))
 
 
 def Score():
@@ -155,7 +102,7 @@ def Moneyadd(i, values):
         n -= 3
         i -= 1
     if moneyadd >= 1000000:
-        moneyadd_value = font.render("Cookies per click: " + str(round(moneyadd/10**(n), 2)) + values[i], True,
+        moneyadd_value = font.render("Cookies per click: " + str(round(moneyadd/10**n, 2)) + values[i], True,
                                          (255, 255, 255))
         screen.blit(moneyadd_value, (0, 700))
     else:
@@ -194,7 +141,7 @@ def Upgrade4():
 
 def update():
     screen.blit(store, (0, 0))
-    Money()
+    Money(i, values)
     Upgrade1()
     Upgrade2()
     Upgrade3()
@@ -305,7 +252,7 @@ while running:
                 CookieY = 150
     Cookie()
     Shop()
-    Money()
+    Money(i, values)
     Score()
     Moneyadd(i, values)
     pygame.display.update()
