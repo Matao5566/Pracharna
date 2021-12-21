@@ -1,6 +1,7 @@
 import pygame
 import pandas as pd
 import plotly.graph_objects as go
+from time import time, sleep
 
 # Values
 values = ["Mil", "Bil", "Tril", "Quadrill", "Quintill", "Sextill", "Septill", "Octill", "Nonill", "Decill", "Undecill",
@@ -44,6 +45,8 @@ upgrade2 = 100
 upgrade3 = 1000
 # upgrade4
 upgrade4 = 10**6
+# upgrade5
+upgrade5 = 300
 # Money
 money = 0
 font = pygame.font.Font('freesansbold.ttf', 32)
@@ -65,6 +68,10 @@ shopY = 80
 # Shop icon
 shop_icon = pygame.image.load('Shop.png')
 
+# Timer
+timer = 0
+clock = pygame.time.Clock()
+cps = 0
 
 def Money(values):
     m = 6
@@ -101,6 +108,11 @@ def Shop():
     screen.blit(shop_value, (shopX, shopY))
 
 
+def CPS():
+    cps_value = font.render("Cookies per second:" + str(cps), True, (255, 255, 255))
+    screen.blit(cps_value, (0, 750))
+
+
 def Moneyadd(values):
     n = 63
     i = 19
@@ -121,7 +133,7 @@ def Backtobakery():
     bakery_value = font.render("To get back to bakery press <-", True, (255, 255, 255))
     screen.blit(bakery_value, (0, 400))
 
-
+#Upgrades
 def Upgrade1(values):
     n = 63
     i = 19
@@ -189,6 +201,24 @@ def Upgrade4(values):
         screen.blit(upgrade4_value, (0, 250))
 
 
+def Upgrade5(values):
+    m = 6
+    j = 0
+    while upgrade5 >= 10 ** m:
+        if m >= 66:
+            break
+        m += 3
+        j += 1
+    if upgrade5 >= 10**6:
+        upgrade5_value = font.render("<5> Babka (+0.5 Cookies per second) Price :" + str(round(upgrade5/10**(m-3), 2))
+                                     + values[j-1], True, (0, 255, 0))
+        screen.blit(upgrade5_value, (0, 300))
+    elif upgrade5 < 10**6:
+        upgrade5_value = font.render("<5> Babka (+0.5 Cookies per second) Price :" + str(round(upgrade5)),
+                                     True, (0, 255, 0))
+        screen.blit(upgrade5_value, (0, 300))
+
+
 def update():
     screen.blit(store, (0, 0))
     Money(values)
@@ -196,19 +226,27 @@ def update():
     Upgrade2(values)
     Upgrade3(values)
     Upgrade4(values)
+    Upgrade5(values)
     Moneyadd(values)
     Score()
     Backtobakery()
+    CPS()
     pygame.display.update()
 
 # Game Loop
 running = True
 while running:
-
     # RGB = Red, Green, Blue
     screen.fill((0, 0, 0))
     screen.blit(background, (0, 0))
     screen.blit(shop_icon, (0, 50))
+    CPS()
+    # timer
+    dt = clock.tick()
+    timer += dt
+    if timer >= 1000:
+        money += cps
+        timer = 0
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -260,6 +298,12 @@ while running:
                             upgrade4 += upgrade4 * 1.5
                             multiplier += 0.5
                             update()
+                    if event.type == pygame.KEYDOWN and event.key == pygame.K_5:
+                        if money - upgrade5 >= 0:
+                            money -= upgrade5
+                            upgrade5 += 300 * 1.2
+                            cps += 1
+                            update()
                         else:
                             continue
                     else:
@@ -307,3 +351,4 @@ while running:
     Score()
     Moneyadd(values)
     pygame.display.update()
+
