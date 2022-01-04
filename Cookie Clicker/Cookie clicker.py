@@ -210,11 +210,11 @@ def Upgrade5(values):
         m += 3
         j += 1
     if upgrade5 >= 10**6:
-        upgrade5_value = font.render("<5> Babka (+0.5 Cookies per second) Price :" + str(round(upgrade5/10**(m-3), 2))
+        upgrade5_value = font.render("<5> Babka (+1 Cookies per second) Price :" + str(round(upgrade5/10**(m-3), 2))
                                      + values[j-1], True, (0, 255, 0))
         screen.blit(upgrade5_value, (0, 300))
     elif upgrade5 < 10**6:
-        upgrade5_value = font.render("<5> Babka (+0.5 Cookies per second) Price :" + str(round(upgrade5)),
+        upgrade5_value = font.render("<5> Babka (+1 Cookies per second) Price :" + str(round(upgrade5)),
                                      True, (0, 255, 0))
         screen.blit(upgrade5_value, (0, 300))
 
