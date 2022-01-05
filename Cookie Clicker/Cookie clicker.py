@@ -1,7 +1,7 @@
 import pygame
 import pandas as pd
 import plotly.graph_objects as go
-from time import time, sleep
+
 
 # Values
 values = ["Mil", "Bil", "Tril", "Quadrill", "Quintill", "Sextill", "Septill", "Octill", "Nonill", "Decill", "Undecill",
@@ -218,6 +218,15 @@ def Upgrade5(values):
                                      True, (0, 255, 0))
         screen.blit(upgrade5_value, (0, 300))
 
+shop = False
+
+
+def toggle_shop(shop):
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
+        shop = True
+    elif event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
+        shop = False
+
 
 def update():
     screen.blit(store, (0, 0))
@@ -232,15 +241,18 @@ def update():
     Backtobakery()
     CPS()
     pygame.display.update()
-
+cookie = 1
 # Game Loop
 running = True
 while running:
+
     # RGB = Red, Green, Blue
     screen.fill((0, 0, 0))
     screen.blit(background, (0, 0))
     screen.blit(shop_icon, (0, 50))
     CPS()
+    if cookie == 1:
+        Cookie()
     # timer
     dt = clock.tick()
     timer += dt
@@ -262,52 +274,51 @@ while running:
                 Moneyadd(values)
                 Money(values)
             if event.key == pygame.K_RIGHT:
-                screen.blit(store, (0, 0))
+                shop = True
+    if shop is True:
+        print("xd")
+        update()
+
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
+            shop = False
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_1:
+            if money - upgrade1 >= 0:
+                money -= upgrade1
+                upgrade1 += 15
+                moneyadd += 100
                 update()
-                while True:
-                    event = pygame.event.wait()
-                    if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
-                        break
-                    if event.type == pygame.KEYDOWN and event.key == pygame.K_1:
-                        if money - upgrade1 >= 0:
-                            money -= upgrade1
-                            upgrade1 += 15
-                            moneyadd += 1
-                            update()
-                        else:
-                            continue
-                    if event.type == pygame.KEYDOWN and event.key == pygame.K_2:
-                        if money - upgrade2 >= 0:
-                            money -= upgrade2
-                            upgrade2 += 200
-                            moneyadd += 10
-                            update()
-                        else:
-                            continue
-                    if event.type == pygame.KEYDOWN and event.key == pygame.K_3:
-                        if money - upgrade3 >= 0:
-                            money -= upgrade3
-                            upgrade3 += 1.25*upgrade3
-                            multiplier += 0.01
-                            update()
-                        else:
-                            continue
-                    if event.type == pygame.KEYDOWN and event.key == pygame.K_4:
-                        if money - upgrade4 >= 0:
-                            money -= upgrade4
-                            upgrade4 += upgrade4 * 1.5
-                            multiplier += 0.5
-                            update()
-                    if event.type == pygame.KEYDOWN and event.key == pygame.K_5:
-                        if money - upgrade5 >= 0:
-                            money -= upgrade5
-                            upgrade5 += 300 * 1.2
-                            cps += 1
-                            update()
-                        else:
-                            continue
-                    else:
-                        continue
+            else:
+                continue
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_2:
+            if money - upgrade2 >= 0:
+                money -= upgrade2
+                upgrade2 += 200
+                moneyadd += 10
+                update()
+            else:
+                continue
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_3:
+            if money - upgrade3 >= 0:
+                money -= upgrade3
+                upgrade3 += 1.25*upgrade3
+                multiplier += 0.01
+                update()
+            else:
+                continue
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_4:
+            if money - upgrade4 >= 0:
+                money -= upgrade4
+                upgrade4 += upgrade4 * 1.5
+                multiplier += 0.5
+                update()
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_5:
+            if money - upgrade5 >= 0:
+                money -= upgrade5
+                upgrade5 += 300 * 1.2
+                cps += 1
+                update()
+            else:
+                continue
 
             if event.key == pygame.K_ESCAPE:
                 print(data)
@@ -342,13 +353,16 @@ while running:
                 fig.show()
                 running = False
 
+        #sušenka nahoru
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_SPACE:
                 CookieY = 150
-    Cookie()
+
     Shop()
     Money(values)
     Score()
     Moneyadd(values)
     pygame.display.update()
+    toggle_shop(shop)
+    print(shop)
 
