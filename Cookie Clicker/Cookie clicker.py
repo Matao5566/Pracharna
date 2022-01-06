@@ -25,7 +25,7 @@ CookieImg = pygame.image.load('bigcookie.png')
 CookieX = 600
 CookieY = 150
 CookieY_change = 0
-# zabí se
+
 # Background
 background = pygame.image.load('oven.png')
 # Store
@@ -72,6 +72,10 @@ shop_icon = pygame.image.load('Shop.png')
 timer = 0
 clock = pygame.time.Clock()
 cps = 0
+
+#Colors
+color_light = (170, 170, 170)
+color_dark = (100, 100, 100)
 
 def Money(values):
     m = 6
@@ -140,14 +144,17 @@ def Upgrade1(values):
     while upgrade1 <= 10**n:
         n -= 3
         i -= 1
+
+    pygame.draw.rect(screen, color_light, [0, 95, 1000, 40])
+
     if upgrade1 >= 10**6:
         upgrade1_value = font.render("<1> Babiččina volba (+1 Cookie per click) Price :" + str(round(upgrade1/10**n, 2))
                                      + values[i], True, (0, 255, 0))
-        screen.blit(upgrade1_value, (0, 100))
+        screen.blit(upgrade1_value, (10, 100))
     elif upgrade1 < 10**6:
         upgrade1_value = font.render("<1> Babiččina volba (+1 Cookie per click) Price :" + str(round(upgrade1)), True,
                                      (0, 255, 0))
-        screen.blit(upgrade1_value, (0, 100))
+        screen.blit(upgrade1_value, (10, 100))
 
 
 
@@ -261,15 +268,21 @@ while running:
     dt = clock.tick()
     timer += dt
     if timer >= 1000:
+        timer_diff = timer % 1000
         money += cps
         timer = 0
+        timer += timer_diff
+        timer_diff = 0
+
+    if shop:
+        update()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
+            if event.key == pygame.K_SPACE and not shop:
                 CookieY = 145
                 money += moneyadd * multiplier
                 celkem += moneyadd * multiplier
@@ -278,97 +291,51 @@ while running:
                 data2.append([score, celkem])
                 Moneyadd(values)
                 Money(values)
+
             if event.key == pygame.K_RIGHT:
                 shop = True
+
+            if event.key == pygame.K_LEFT:
+                shop = False
+
+            if event.key == pygame.K_1 and shop:
+                if money - upgrade1 >= 0:
+                    money -= upgrade1
+                    upgrade1 += 15
+                    moneyadd += 100
+                    update()
+
+            if event.key == pygame.K_2 and shop:
+                if money - upgrade2 >= 0:
+                    money -= upgrade2
+                    upgrade2 += 200
+                    moneyadd += 10
+                    update()
+
+            if event.key == pygame.K_3 and shop:
+                if money - upgrade3 >= 0:
+                    money -= upgrade3
+                    upgrade3 += 1.25 * upgrade3
+                    multiplier += 0.01
+                    update()
+
+            if event.key == pygame.K_4 and shop:
+                if money - upgrade4 >= 0:
+                    money -= upgrade4
+                    upgrade4 += upgrade4 * 1.5
+                    multiplier += 0.5
+                    update()
+
+            if event.key == pygame.K_5 and shop:
+                if money - upgrade5 >= 0:
+                    money -= upgrade5
+                    upgrade5 += 300 * 1.2
+                    cps += 1
+                    update()
 
             # sušenka nahoru
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_SPACE:
                 CookieY = 150
-    if shop:
-        # print("xd")
-        # redraw()
-        update()
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
-                    shop = False
-                if event.key == pygame.K_1:
-                    if money - upgrade1 >= 0:
-                        money -= upgrade1
-                        upgrade1 += 15
-                        moneyadd += 100
-                        update()
-
-                if event.key == pygame.K_2:
-                    if money - upgrade2 >= 0:
-                        money -= upgrade2
-                        upgrade2 += 200
-                        moneyadd += 10
-                        update()
-
-                if event.key == pygame.K_3:
-                    if money - upgrade3 >= 0:
-                        money -= upgrade3
-                        upgrade3 += 1.25*upgrade3
-                        multiplier += 0.01
-                        update()
-
-                if event.key == pygame.K_4:
-                    if money - upgrade4 >= 0:
-                        money -= upgrade4
-                        upgrade4 += upgrade4 * 1.5
-                        multiplier += 0.5
-                        update()
-
-                if event.key == pygame.K_5:
-                    if money - upgrade5 >= 0:
-                        money -= upgrade5
-                        upgrade5 += 300 * 1.2
-                        cps += 1
-                        update()
-
-
-            # if event.key == pygame.K_ESCAPE:
-            #     print(data)
-            #     print(data2)
-            #     df = pd.DataFrame(data, columns=["x", "y"])  # převedu data na formát DataFrame
-            #
-            #     fig = go.Figure()  # do prom. si uložíme "obejkt" graf
-            #
-            #     fig.add_trace(go.Scatter(  # do grafu přidáme grafovou čáru a upřesníme její vlastnosti
-            #         x=df["x"],
-            #         y=df["y"],
-            #         name="na druhou",
-            #         mode="lines+markers",
-            #         marker=dict({"symbol": "arrow-bar-left", "size": 6}),
-            #         line=dict({"width": 2, "shape": "linear", "dash": "dashdot"}),
-            #         fill="tozeroy",
-            #     ))
-            #     df2 = pd.DataFrame(data2, columns=["x", "y"])  # převedu data na formát DataFrame
-            #
-            #     fig2 = go.Figure()  # do prom. si uložíme "obejkt" graf
-            #
-            #     fig2.add_trace(go.Scatter(  # do grafu přidáme grafovou čáru a upřesníme její vlastnosti
-            #         x=df2["x"],
-            #         y=df2["y"],
-            #         name="na druhou",
-            #         mode="lines+markers",
-            #         marker=dict({"symbol": "arrow-bar-left", "size": 6}),
-            #         line=dict({"width": 2, "shape": "linear", "dash": "dashdot"}),
-            #         fill="tozeroy",
-            #     ))
-            #     fig2.show()
-            #     fig.show()
-            #     running = False
-
-
 
     pygame.display.update()
-    print(event)
-    # Money(values)
-    # Score()
-    # Moneyadd(values)
-    # pygame.display.update()
-    # toggle_shop(shop)
-
