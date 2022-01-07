@@ -3,7 +3,7 @@ import pygame
 pygame.init()
 
 
-class Button():
+class Button:
     def __init__(self, x, y, sx, sy, bcolour, fbcolour, font, fontsize, fcolour, text, tiptext):
         self.rect = pygame.Rect(x, y, sx, sy)
         self.bcolour = bcolour

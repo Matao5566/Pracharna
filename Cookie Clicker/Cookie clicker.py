@@ -138,6 +138,28 @@ def Backtobakery():
     screen.blit(bakery_value, (0, 400))
 
 #Upgrades
+
+class upgrades:
+    def __init__(self, x, y, sx, sy, text, detail, background_color, hover_color):
+        self.rect = pygame.Rect(x, y, sx, sy)
+        self.text = text
+        self.detail = detail
+        self.background_color = background_color
+        self.hover_color = hover_color
+        self.current = False
+        self.x = x
+        self.y = y
+
+    def button_show(self):
+        pygame.draw.rect(screen, self.background_color, self.rect)
+        if upgrade1 >= 10 ** 6:
+            upgrade1_value = font.render(self.text, True, (0, 255, 0))
+            screen.blit(upgrade1_value, )
+        elif upgrade1 < 10 ** 6:
+            upgrade1_value = font.render("<1> Babiččina volba (+1 Cookie per click) Price :" + str(round(upgrade1)),
+                                         True,
+                                         (0, 255, 0))
+
 def Upgrade1(values):
     n = 63
     i = 19
