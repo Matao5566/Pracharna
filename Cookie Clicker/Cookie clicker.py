@@ -1,6 +1,8 @@
 import pygame
 import pandas as pd
 import plotly.graph_objects as go
+from pygame import mixer
+
 
 
 # Values
@@ -15,6 +17,12 @@ data2 = [[0, 0]]
 
 # Intialize the pygame
 pygame.init()
+
+#Background Music
+mixer.music.load('OST3.wav')
+Sound1 = mixer.Sound('OST3.wav')
+Sound1.set_volume(0.1)
+Sound1.play(-1)
 
 # create the screen
 screen = pygame.display.set_mode((1250, 800))
