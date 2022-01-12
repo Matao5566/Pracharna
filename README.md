@@ -1,3 +1,8 @@
+změnit values v celým programu
+
+
+
+
 I work all night, I work all day to pay the bills I have to pay
 
 Ain't it sad?
