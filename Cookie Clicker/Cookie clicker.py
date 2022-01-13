@@ -81,26 +81,34 @@ timer = 0
 clock = pygame.time.Clock()
 cps = 0
 
-#Colors
+# Colors
 color_light = (170, 170, 170)
 color_dark = (100, 100, 100)
 
-def Money(values):
-    m = 6
-    j = 0
-    while money >= 10 ** m:
-        if m >= 66:
-            break
-        m += 3
-        j += 1
+# Toggle_shop
+shop = False
 
-    if money < 10**6:
+
+def n_counter(upgrade_x):
+    n = 0
+    i = 0
+    if upgrade_x >= 10**3:
+        while upgrade_x >= 10 ** (3 + n):
+            n += 3
+            i += 1
+    else:
+        n = 0
+    return n, i
+
+
+def Money(values):
+    if money < 10**3:
         money_value = font.render("Cookies : " + str(round(money)), True, (150, 75, 0))
         screen.blit(money_value, (moneyX, moneyY))
-    elif money >= 10**6:
-        money_value = font.render("Cookies : " + str(round(money/10**(m-3), 2)) + values[j-1], True, (150, 75, 0))
+    elif money >= 10**3:
+        money_value = font.render("Cookies : " + str(round(money/10**(n_counter(money)[0]), 2)) + values[n_counter(money)[1]], True, (150, 75, 0))
         screen.blit(money_value, (moneyX, moneyY))
-    # print(m, j)
+
 
 def Score():
     if score < 1000000:
@@ -131,26 +139,26 @@ def Moneyadd(values):
     while moneyadd <= 10**n:
         n -= 3
         i -= 1
-    if moneyadd >= 10**6:
-        moneyadd_value = font.render("Cookies per click: " + str(round((moneyadd * multiplier)/10**n, 2)) + values[i], True,
+    if moneyadd >= 10**3:
+        moneyadd_value = font.render("Cookies per click: " + str(round((moneyadd * multiplier)/10**n_counter(moneyadd)[0], 2)) + values[n_counter(moneyadd)[1]], True,
                                          (255, 255, 255))
         screen.blit(moneyadd_value, (0, 700))
     elif moneyadd < 10**6:
         moneyadd_value = font.render("Cookies per click: " + str(round(moneyadd * multiplier)), True,
                                      (255, 255, 255))
         screen.blit(moneyadd_value, (0, 700))
-    # print(n, i)
 
-def Backtobakery():
+
+def backtobakery():
     bakery_value = font.render("To get back to bakery press <-", True, (255, 255, 255))
     screen.blit(bakery_value, (0, 400))
 
-#Upgrades
 
+# Upgrades
 class Upgrades:
-    def __init__(self, x, y, sx, sy, text, detail, background_color, hover_color):
+    def __init__(self, x, y, sx, sy, text, detail, background_color, hover_color, upgrade):
         self.rect = pygame.Rect(x, y, sx, sy)
-        self.text = text
+        self.text = f"{text} Price: {str(round(upgrade / 10 ** n_counter(upgrade)[0], 2)) + values[n_counter(upgrade)[1]]}"
         self.detail = detail
         self.background_color = background_color
         self.hover_color = hover_color
@@ -159,14 +167,12 @@ class Upgrades:
         self.y = y
         self.detail_surface = font.render(detail, False, (0, 0, 0), (255, 255, 0))
 
-
     def button_show(self, display):
         colour = self.hover_color if self.current else self.background_color
         pygame.draw.rect(display, colour, self.rect)
 
         upgrade1_value = font.render(self.text, True, (0, 255, 0))
-        display.blit(upgrade1_value, (10, 100))
-
+        display.blit(upgrade1_value, upgrade1_value.get_rect(center=self.rect.center))
 
     def button_detail(self, display):
         if self.current:
@@ -177,117 +183,23 @@ class Upgrades:
         self.current = self.rect.collidepoint(mouse_pos)
         return mouse_click if self.current else True
 
-def n_counter(upgrade_x):
-    n = 0
-    i = 0
-    if upgrade_x > 10**3:
-        while upgrade_x >= 10 ** n:
-            n += 3
-            i += 1
-    else:
-        n = 0
-    return n, i
-
-# def n_counter(upgrade_x):
-#     n = 63
-#     i = 19
-#     while upgrade_x <= 10 ** n:
-#         n -= 3
-#         i -= 1
-#     return n
+    def mouse_clicking(self, mouse_pos):
+        if self.rect.collidepoint(mouse_pos):
+            sus = True
+        else:
+            sus = False
+        return sus
 
 
+Upgrade_1 = Upgrades(0, 90, 650, 40, "Babiččin váleček", "+1 Cookie per click", color_dark, color_light, upgrade1)
 
+Upgrade_2 = Upgrades(0, 150, 650, 40, "Babiččina vařečka", "+10 Cookies per click", color_dark, color_light, upgrade2)
 
-def Upgrade1(values):
-    n = 63
-    i = 19
-    while upgrade1 <= 10**n:
-        n -= 3
-        i -= 1
+Upgrade_3 = Upgrades(0, 210, 650, 40, "Sušenková planetka", "+1% Cookies per click", color_dark, color_light, upgrade3)
 
-    pygame.draw.rect(screen, color_light, [0, 95, 1000, 40])
+Upgrade_4 = Upgrades(0, 270, 650, 40, "Sušenkový božík", "+50% Cookies per click", color_dark, color_light, upgrade4)
 
-    if upgrade1 >= 10**6:
-        upgrade1_value = font.render("<1> Babiččina volba (+1 Cookie per click) Price :" + str(round(upgrade1/10**n, 2))
-                                     + values[i], True, (0, 255, 0))
-        screen.blit(upgrade1_value, (10, 100))
-    elif upgrade1 < 10**6:
-        upgrade1_value = font.render("<1> Babiččina volba (+1 Cookie per click) Price :" + str(round(upgrade1)), True,
-                                     (0, 255, 0))
-        screen.blit(upgrade1_value, (10, 100))
-
-
-
-def Upgrade2(values):
-    n = 63
-    i = 19
-    while upgrade2 <= 10**n:
-        n -= 3
-        i -= 1
-    if upgrade2 >= 10**6:
-        upgrade2_value = font.render("<2> Sušenkové Mlsání (+10 Cookies per click) Price :" + str(round(upgrade2/10**n, 2))
-                                     + values[i], True, (0, 255, 0))
-        screen.blit(upgrade2_value, (0, 150))
-    elif upgrade2 < 10**6:
-        upgrade2_value = font.render("<2> Sušenkové Mlsání (+10 Cookies per click) Price :" + str(round(upgrade2)), True,
-                                     (0, 255, 0))
-        screen.blit(upgrade2_value, (0, 150))
-
-
-def Upgrade3(values):
-    n = 63
-    i = 19
-    while upgrade3 <= 10**n:
-        n -= 3
-        i -= 1
-    if upgrade3 >= 10**6:
-        upgrade3_value = font.render("<3> Mlsný jazýček (+1% Cookies per click) Price :" + str(round(upgrade3/10**n, 2))
-                                     + values[i], True, (0, 255, 0))
-        screen.blit(upgrade3_value, (0, 200))
-    elif upgrade3 < 10**6:
-        upgrade3_value = font.render("<3> Mlsný jazýček (+1% Cookies per click) Price :" + str(round(upgrade3)), True,
-                                     (0, 255, 0))
-        screen.blit(upgrade3_value, (0, 200))
-
-
-def Upgrade4(values):
-    m = 6
-    j = 0
-    while upgrade4 >= 10 ** m:
-        if m >= 66:
-            break
-        m += 3
-        j += 1
-    if upgrade4 >= 10**6:
-        upgrade4_value = font.render("<4> Dvojité sušenkové krabice (+50% Cookies per click) Price :" + str(round(upgrade4/10**(m-3), 2))
-                                     + values[j-1], True, (0, 255, 0))
-        screen.blit(upgrade4_value, (0, 250))
-    elif upgrade4 < 10**6:
-        upgrade4_value = font.render("<4> Dvojité sušenkové krabice (+50% Cookies per click) Price :" + str(round(upgrade4)),
-                                     True, (0, 255, 0))
-        screen.blit(upgrade4_value, (0, 250))
-
-
-def Upgrade5(values):
-    m = 6
-    j = 0
-    while upgrade5 >= 10 ** m:
-        if m >= 66:
-            break
-        m += 3
-        j += 1
-    if upgrade5 >= 10**6:
-        upgrade5_value = font.render("<5> Babka (+1 Cookies per second) Price :" + str(round(upgrade5/10**(m-3), 2))
-                                     + values[j-1], True, (0, 255, 0))
-        screen.blit(upgrade5_value, (0, 300))
-    elif upgrade5 < 10**6:
-        upgrade5_value = font.render("<5> Babka (+1 Cookies per second) Price :" + str(round(upgrade5)),
-                                     True, (0, 255, 0))
-        screen.blit(upgrade5_value, (0, 300))
-
-
-shop = False
+Upgrade_5 = Upgrades(0, 330, 650, 40, "Bába", "+1 Cookie per second", color_dark, color_light, upgrade5)
 
 
 def toggle_shop(shop):
@@ -309,14 +221,21 @@ def redraw():
 def update():
     Upgrade_1.button_show(screen)
     Upgrade_1.button_detail(screen)
-    Upgrade2(values)
-    Upgrade3(values)
-    Upgrade4(values)
-    Upgrade5(values)
-    Backtobakery()
+    Upgrade_1.focus_check(mouse_pos, mouse_click)
+    Upgrade_2.button_show(screen)
+    Upgrade_2.button_detail(screen)
+    Upgrade_2.focus_check(mouse_pos, mouse_click)
+    Upgrade_3.button_show(screen)
+    Upgrade_3.button_detail(screen)
+    Upgrade_3.focus_check(mouse_pos, mouse_click)
+    Upgrade_4.button_show(screen)
+    Upgrade_4.button_detail(screen)
+    Upgrade_4.focus_check(mouse_pos, mouse_click)
+    Upgrade_5.button_show(screen)
+    Upgrade_5.button_detail(screen)
+    Upgrade_5.focus_check(mouse_pos, mouse_click)
+    backtobakery()
     pygame.display.update()
-
-Upgrade_1 = Upgrades(0, 95, 1000, 40, "Babiččin váleček Price :" + str(round(upgrade1 / 10 ** n_counter(upgrade1)[0], 2)) + values[n_counter(upgrade1)[1]], "+1 Cookie per click", color_dark, color_light)
 
 # Game Loop
 running = True
@@ -337,19 +256,56 @@ while running:
         timer = 0
         timer += timer_diff
         timer_diff = 0
-
+    mouse_pos = pygame.mouse.get_pos()
     if shop:
         update()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            mouse_click = True
+
+            if Upgrade_1.mouse_clicking(mouse_pos):
+                if money - upgrade1 >= 0:
+                    money -= upgrade1
+                    upgrade1 += 15
+                    moneyadd += 100
+                    Upgrade_1 = Upgrades(0, 90, 650, 40, "Babiččin váleček", "+1 Cookie per click", color_dark,
+                                         color_light, upgrade1)
+                    
+            if Upgrade_2.mouse_clicking(mouse_pos):
+                if money - upgrade2 >= 0:
+                    money -= upgrade2
+                    upgrade2 += 200
+                    moneyadd += 10
+                    Upgrade_2 = Upgrades(0, 150, 650, 40, "Babiččina vařečka", "+10 Cookies per click", color_dark,
+                                         color_light, upgrade2)
+
+            if Upgrade_3.mouse_clicking(mouse_pos):
+                if money - upgrade3 >= 0:
+                    money -= upgrade3
+                    upgrade3 += 1.25 * upgrade3
+                    multiplier += 0.01
+                    Upgrade_3 = Upgrades(0, 210, 650, 40, "Sušenková planetka", "+1% Cookies per click", color_dark,
+                                         color_light, upgrade3)
+
+            if Upgrade_4.mouse_clicking(mouse_pos):
+                if money - upgrade4 >= 0:
+                    money -= upgrade4
+                    upgrade4 += upgrade4 * 1.5
+                    multiplier += 0.5
+                    Upgrade_4 = Upgrades(0, 270, 650, 40, "Sušenkový božík", "+50% Cookies per click", color_dark,
+                                         color_light, upgrade4)
+            if Upgrade_5.mouse_clicking(mouse_pos):
+                if money - upgrade5 >= 0:
+                    money -= upgrade5
+                    upgrade5 += 300 * 1.2
+                    cps += 1
+                    Upgrade_5 = Upgrades(0, 330, 650, 40, "Bába", "+1 Cookie per second", color_dark, color_light,
+                                         upgrade5)
 
         if event.type == pygame.KEYDOWN:
-
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                mouse_click = True
-
             if event.key == pygame.K_SPACE and not shop:
                 CookieY = 145
                 money += moneyadd * multiplier
@@ -371,53 +327,18 @@ while running:
                     money -= upgrade1
                     upgrade1 += 15
                     moneyadd += 100
-                    Upgrade_1 = Upgrades(0, 95, 1000, 40, "Babiččin váleček Price :" + str(
+                    Upgrade_1 = Upgrades(0, 90, 650, 40, "Babiččin váleček Price :" + str(
                         round(upgrade1 / 10 ** n_counter(upgrade1)[0], 2)) + values[n_counter(upgrade1)[1]],
                                          "+1 Cookie per click", color_dark, color_light)
 
-            if event.key == pygame.K_2 and shop:
-                if money - upgrade2 >= 0:
-                    money -= upgrade2
-                    upgrade2 += 200
-                    moneyadd += 10
-                    Upgrade_1 = Upgrades(0, 95, 1000, 40, "Babiččin váleček Price :" + str(
-                        round(upgrade1 / 10 ** n_counter(upgrade1)[0], 2)) + values[n_counter(upgrade1)[1]],
-                                         "+1 Cookie per click", color_dark, color_light)
 
-            if event.key == pygame.K_3 and shop:
-                if money - upgrade3 >= 0:
-                    money -= upgrade3
-                    upgrade3 += 1.25 * upgrade3
-                    multiplier += 0.01
-                    Upgrade_1 = Upgrades(0, 95, 1000, 40, "Babiččin váleček Price :" + str(
-                        round(upgrade1 / 10 ** n_counter(upgrade1)[0], 2)) + values[n_counter(upgrade1)[1]],
-                                         "+1 Cookie per click", color_dark, color_light)
-
-            if event.key == pygame.K_4 and shop:
-                if money - upgrade4 >= 0:
-                    money -= upgrade4
-                    upgrade4 += upgrade4 * 1.5
-                    multiplier += 0.5
-                    Upgrade_1 = Upgrades(0, 95, 1000, 40, "Babiččin váleček Price :" + str(
-                        round(upgrade1 / 10 ** n_counter(upgrade1)[0], 2)) + values[n_counter(upgrade1)[1]],
-                                         "+1 Cookie per click", color_dark, color_light)
-
-            if event.key == pygame.K_5 and shop:
-                if money - upgrade5 >= 0:
-                    money -= upgrade5
-                    upgrade5 += 300 * 1.2
-                    cps += 1
-                    Upgrade_1 = Upgrades(0, 95, 1000, 40, "Babiččin váleček Price :" + str(
-                        round(upgrade1 / 10 ** n_counter(upgrade1)[0], 2)) + values[n_counter(upgrade1)[1]],
-                                         "+1 Cookie per click", color_dark, color_light)
 
             # sušenka nahoru
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_SPACE:
                 CookieY = 150
 
-    mouse_pos = pygame.mouse.get_pos()
-    mouse_click = False
-    screen2button = Upgrade_1.focus_check(mouse_pos, mouse_click)
 
+    mouse_click = False
+    Upgrade_1.focus_check(mouse_pos, mouse_click)
     pygame.display.update()
