@@ -190,6 +190,10 @@ class Upgrades:
             sus = False
         return sus
 
+class Xbutton:
+    def __init__(self, x, y, sx, sy, text, upgrade, cost, background_color, press_color):
+        self.rect = pygame.Rect(x, y, sx, sy)
+        self.background_color = background_color
 
 Upgrade_1 = Upgrades(0, 90, 650, 40, "Babiččin váleček", "+1 Cookie per click", color_dark, color_light, upgrade1)
 
