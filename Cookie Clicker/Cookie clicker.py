@@ -18,7 +18,7 @@ data2 = [[0, 0]]
 # Intialize the pygame
 pygame.init()
 
-#Background Music
+# Background Music
 mixer.music.load('OST3.wav')
 Sound1 = mixer.Sound('OST3.wav')
 Sound1.set_volume(0.1)
@@ -63,6 +63,9 @@ moneyadd = 1
 
 # Celkem prachy
 celkem = 0
+
+# Xbuttons
+pressed = False
 
 # Score
 score = 0
@@ -176,24 +179,56 @@ class Upgrades:
 
     def button_detail(self, display):
         if self.current:
-            mouse_pos = pygame.mouse.get_pos()
-            display.blit(self.detail_surface, (mouse_pos[0] + 16, mouse_pos[1]))
+            mouse_position = pygame.mouse.get_pos()
+            display.blit(self.detail_surface, (mouse_position[0] + 16, mouse_position[1]))
 
-    def focus_check(self, mouse_pos, mouse_click):
-        self.current = self.rect.collidepoint(mouse_pos)
+    def focus_check(self, mouse_position, mouse_click):
+        self.current = self.rect.collidepoint(mouse_position)
         return mouse_click if self.current else True
 
-    def mouse_clicking(self, mouse_pos):
-        if self.rect.collidepoint(mouse_pos):
+    def mouse_clicking(self, mouse_position):
+        if self.rect.collidepoint(mouse_position):
             sus = True
         else:
             sus = False
         return sus
 
+
 class Xbutton:
-    def __init__(self, x, y, sx, sy, text, upgrade, cost, background_color, press_color):
+    def __init__(self, x, y, sx, sy, text, upgrade, prachy, background_color, press_color):
         self.rect = pygame.Rect(x, y, sx, sy)
         self.background_color = background_color
+        self.current = False
+        self.text = text
+        self.prachy = prachy
+        self.upgrade = upgrade
+        self.press_color = press_color
+
+    def button_show(self, display, press):
+        color = self.press_color if self.current or press else self.background_color
+        pygame.draw.rect(display, color, self.rect)
+        text = font.render(self.text, True, (0, 255, 0))
+        display.blit(text, text.get_rect(center=self.rect.center))
+        
+    def press_check(self, mouse_position):
+        self.current = self.rect.collidepoint(mouse_position)
+        return mouse_click if self.current else True
+
+    def mouse_clicking(self, press):
+        # if self.current:
+        if press:
+            press = False
+        else:
+            press = True
+        return press
+
+    # def X_10(self, cost, upgrade):
+    #     add = 0
+    #     if upgrade == upgrade1:
+    #         for i in range(0, 10):
+    #             upgrade += 15
+    #             add += 1
+    #         if upgrade <= self.prachy:
 
 Upgrade_1 = Upgrades(0, 90, 650, 40, "Babiččin váleček", "+1 Cookie per click", color_dark, color_light, upgrade1)
 
@@ -205,13 +240,7 @@ Upgrade_4 = Upgrades(0, 270, 650, 40, "Sušenkový božík", "+50% Cookies per c
 
 Upgrade_5 = Upgrades(0, 330, 650, 40, "Bába", "+1 Cookie per second", color_dark, color_light, upgrade5)
 
-
-def toggle_shop(shop):
-    if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
-        shop = True
-    elif event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
-        shop = False
-    return shop
+X10 = Xbutton(800, 90, 40, 40, "10x", upgrade1, money, color_dark, color_light)
 
 
 def redraw():
@@ -239,6 +268,8 @@ def update():
     Upgrade_5.button_detail(screen)
     Upgrade_5.focus_check(mouse_pos, mouse_click)
     backtobakery()
+    X10.button_show(screen, pressed)
+    X10.press_check(mouse_pos)
     pygame.display.update()
 
 # Game Loop
@@ -267,8 +298,12 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        if event.type == pygame.MOUSEBUTTONDOWN:
+        elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_click = True
+
+            if X10.press_check(mouse_pos):
+                X10.mouse_clicking(pressed)
+                print(pressed)
 
             if Upgrade_1.mouse_clicking(mouse_pos):
                 if money - upgrade1 >= 0:
@@ -278,7 +313,7 @@ while running:
                     Upgrade_1 = Upgrades(0, 90, 650, 40, "Babiččin váleček", "+1 Cookie per click", color_dark,
                                          color_light, upgrade1)
                     
-            if Upgrade_2.mouse_clicking(mouse_pos):
+            elif Upgrade_2.mouse_clicking(mouse_pos):
                 if money - upgrade2 >= 0:
                     money -= upgrade2
                     upgrade2 += 200
@@ -286,7 +321,7 @@ while running:
                     Upgrade_2 = Upgrades(0, 150, 650, 40, "Babiččina vařečka", "+10 Cookies per click", color_dark,
                                          color_light, upgrade2)
 
-            if Upgrade_3.mouse_clicking(mouse_pos):
+            elif Upgrade_3.mouse_clicking(mouse_pos):
                 if money - upgrade3 >= 0:
                     money -= upgrade3
                     upgrade3 += 1.25 * upgrade3
@@ -294,14 +329,14 @@ while running:
                     Upgrade_3 = Upgrades(0, 210, 650, 40, "Sušenková planetka", "+1% Cookies per click", color_dark,
                                          color_light, upgrade3)
 
-            if Upgrade_4.mouse_clicking(mouse_pos):
+            elif Upgrade_4.mouse_clicking(mouse_pos):
                 if money - upgrade4 >= 0:
                     money -= upgrade4
                     upgrade4 += upgrade4 * 1.5
                     multiplier += 0.5
                     Upgrade_4 = Upgrades(0, 270, 650, 40, "Sušenkový božík", "+50% Cookies per click", color_dark,
                                          color_light, upgrade4)
-            if Upgrade_5.mouse_clicking(mouse_pos):
+            elif Upgrade_5.mouse_clicking(mouse_pos):
                 if money - upgrade5 >= 0:
                     money -= upgrade5
                     upgrade5 += 300 * 1.2
@@ -309,7 +344,7 @@ while running:
                     Upgrade_5 = Upgrades(0, 330, 650, 40, "Bába", "+1 Cookie per second", color_dark, color_light,
                                          upgrade5)
 
-        if event.type == pygame.KEYDOWN:
+        elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE and not shop:
                 CookieY = 145
                 money += moneyadd * multiplier
@@ -320,20 +355,20 @@ while running:
                 Moneyadd(values)
                 Money(values)
 
-            if event.key == pygame.K_RIGHT:
+            elif event.key == pygame.K_RIGHT:
                 shop = True
 
-            if event.key == pygame.K_LEFT:
+            elif event.key == pygame.K_LEFT:
                 shop = False
 
-            if event.key == pygame.K_1 and shop:
-                if money - upgrade1 >= 0:
-                    money -= upgrade1
-                    upgrade1 += 15
-                    moneyadd += 100
-                    Upgrade_1 = Upgrades(0, 90, 650, 40, "Babiččin váleček Price :" + str(
-                        round(upgrade1 / 10 ** n_counter(upgrade1)[0], 2)) + values[n_counter(upgrade1)[1]],
-                                         "+1 Cookie per click", color_dark, color_light)
+            # elif event.key == pygame.K_1 and shop:
+            #     if money - upgrade1 >= 0:
+            #         money -= upgrade1
+            #         upgrade1 += 15
+            #         moneyadd += 100
+            #         Upgrade_1 = Upgrades(0, 90, 650, 40, "Babiččin váleček Price :" + str(
+            #             round(upgrade1 / 10 ** n_counter(upgrade1)[0], 2)) + values[n_counter(upgrade1)[1]],
+            #                              "+1 Cookie per click", color_dark, color_light)
 
 
 
