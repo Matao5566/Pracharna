@@ -64,9 +64,6 @@ moneyadd = 1
 # Celkem prachy
 celkem = 0
 
-# Xbuttons
-pressed = False
-
 # Score
 score = 0
 scoreX = 625
@@ -194,6 +191,7 @@ class Upgrades:
         return sus
 
 
+pressing = False
 class Xbutton:
     def __init__(self, x, y, sx, sy, text, upgrade, prachy, background_color, press_color):
         self.rect = pygame.Rect(x, y, sx, sy)
@@ -204,8 +202,8 @@ class Xbutton:
         self.upgrade = upgrade
         self.press_color = press_color
 
-    def button_show(self, display, press):
-        color = self.press_color if self.current or press else self.background_color
+    def button_show(self, display):
+        color = self.press_color if self.current else self.background_color
         pygame.draw.rect(display, color, self.rect)
         text = font.render(self.text, True, (0, 255, 0))
         display.blit(text, text.get_rect(center=self.rect.center))
@@ -214,13 +212,17 @@ class Xbutton:
         self.current = self.rect.collidepoint(mouse_position)
         return mouse_click if self.current else True
 
-    def mouse_clicking(self, press):
-        # if self.current:
-        if press:
-            press = False
+    def mouse_clicking(self, mouse_position, pressed):
+        if self.rect.collidepoint(mouse_position):
+            if pressed:
+                press = True
+                pressed = False
+            elif not pressed:
+                press = True
+                pressed = True
         else:
-            press = True
-        return press
+            press = False
+        return press, pressed
 
     # def X_10(self, cost, upgrade):
     #     add = 0
@@ -268,7 +270,7 @@ def update():
     Upgrade_5.button_detail(screen)
     Upgrade_5.focus_check(mouse_pos, mouse_click)
     backtobakery()
-    X10.button_show(screen, pressed)
+    X10.button_show(screen)
     X10.press_check(mouse_pos)
     pygame.display.update()
 
@@ -300,12 +302,13 @@ while running:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_click = True
+            print(mouse_click)
 
-            if X10.press_check(mouse_pos):
-                X10.mouse_clicking(pressed)
-                print(pressed)
+            if X10.mouse_clicking(mouse_pos, pressing)[0]:
+                print(X10.mouse_clicking(mouse_pos, pressing))
 
             if Upgrade_1.mouse_clicking(mouse_pos):
+                print(Upgrade_1.mouse_clicking(mouse_pos))
                 if money - upgrade1 >= 0:
                     money -= upgrade1
                     upgrade1 += 15
