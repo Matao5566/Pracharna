@@ -27,7 +27,6 @@ Sound1.play(-1)
 # create the screen
 screen = pygame.display.set_mode((1250, 800))
 
-
 # Big cookie
 CookieImg = pygame.image.load('bigcookie.png')
 CookieX = 600
@@ -87,7 +86,6 @@ color_dark = (100, 100, 100)
 
 # Toggle_shop
 shop = False
-
 
 def n_counter(upgrade_x):
     n = 0
@@ -212,26 +210,29 @@ class Xbutton:
         self.current = self.rect.collidepoint(mouse_position)
         return mouse_click if self.current else True
 
-    def mouse_clicking(self, mouse_position, pressed):
+    def mouse_clicking(self, mouse_position):
         if self.rect.collidepoint(mouse_position):
-            if pressed:
-                press = True
-                pressed = False
-            elif not pressed:
-                press = True
-                pressed = True
+            sus = True
         else:
-            press = False
-        return press, pressed
+            sus = False
+        return sus
 
-    # def X_10(self, cost, upgrade):
-    #     add = 0
-    #     if upgrade == upgrade1:
-    #         for i in range(0, 10):
-    #             upgrade += 15
-    #             add += 1
-    #         if upgrade <= self.prachy:
+    def X10(self, upgrade, x, add, prachy, prachyadd):
+        celkem = 0
+        for i in range(10):
+            celkem += upgrade
+            upgrade *= x
+        if prachy - celkem >= 0:
+            prachy -= celkem
+            prachyadd += 10*add
+            sus = True
+            return upgrade, prachy, prachyadd, sus
+        else:
+            sus = False
+            return sus
 
+    def sus(self,sus):
+        if
 Upgrade_1 = Upgrades(0, 90, 650, 40, "Babiččin váleček", "+1 Cookie per click", color_dark, color_light, upgrade1)
 
 Upgrade_2 = Upgrades(0, 150, 650, 40, "Babiččina vařečka", "+10 Cookies per click", color_dark, color_light, upgrade2)
@@ -302,16 +303,19 @@ while running:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_click = True
-            print(mouse_click)
+            print(money)
 
-            if X10.mouse_clicking(mouse_pos, pressing)[0]:
-                print(X10.mouse_clicking(mouse_pos, pressing))
+            if X10.mouse_clicking(mouse_pos) and (X10.X10(upgrade1, 1.2, 100, money, moneyadd)[3], bool):
+                upgrade1 = X10.X10(upgrade1, 1.2, 100, money, moneyadd)[0]
+                money = X10.X10(upgrade1, 1.2, 100, money, moneyadd)[1]
+                moneyadd = X10.X10(upgrade1, 1.2, 100, money, moneyadd)[2]
+                Upgrade_1 = Upgrades(0, 90, 650, 40, "Babiččin váleček", "+1 Cookie per click", color_dark,
+                                     color_light, upgrade1)
 
             if Upgrade_1.mouse_clicking(mouse_pos):
-                print(Upgrade_1.mouse_clicking(mouse_pos))
                 if money - upgrade1 >= 0:
                     money -= upgrade1
-                    upgrade1 += 15
+                    upgrade1 *= 1.2
                     moneyadd += 100
                     Upgrade_1 = Upgrades(0, 90, 650, 40, "Babiččin váleček", "+1 Cookie per click", color_dark,
                                          color_light, upgrade1)
@@ -319,7 +323,7 @@ while running:
             elif Upgrade_2.mouse_clicking(mouse_pos):
                 if money - upgrade2 >= 0:
                     money -= upgrade2
-                    upgrade2 += 200
+                    upgrade2 *= 2
                     moneyadd += 10
                     Upgrade_2 = Upgrades(0, 150, 650, 40, "Babiččina vařečka", "+10 Cookies per click", color_dark,
                                          color_light, upgrade2)
@@ -327,7 +331,7 @@ while running:
             elif Upgrade_3.mouse_clicking(mouse_pos):
                 if money - upgrade3 >= 0:
                     money -= upgrade3
-                    upgrade3 += 1.25 * upgrade3
+                    upgrade3 *= 2
                     multiplier += 0.01
                     Upgrade_3 = Upgrades(0, 210, 650, 40, "Sušenková planetka", "+1% Cookies per click", color_dark,
                                          color_light, upgrade3)
@@ -335,14 +339,14 @@ while running:
             elif Upgrade_4.mouse_clicking(mouse_pos):
                 if money - upgrade4 >= 0:
                     money -= upgrade4
-                    upgrade4 += upgrade4 * 1.5
+                    upgrade4 *= 2
                     multiplier += 0.5
                     Upgrade_4 = Upgrades(0, 270, 650, 40, "Sušenkový božík", "+50% Cookies per click", color_dark,
                                          color_light, upgrade4)
             elif Upgrade_5.mouse_clicking(mouse_pos):
                 if money - upgrade5 >= 0:
                     money -= upgrade5
-                    upgrade5 += 300 * 1.2
+                    upgrade5 *= 2
                     cps += 1
                     Upgrade_5 = Upgrades(0, 330, 650, 40, "Bába", "+1 Cookie per second", color_dark, color_light,
                                          upgrade5)
@@ -363,16 +367,6 @@ while running:
 
             elif event.key == pygame.K_LEFT:
                 shop = False
-
-            # elif event.key == pygame.K_1 and shop:
-            #     if money - upgrade1 >= 0:
-            #         money -= upgrade1
-            #         upgrade1 += 15
-            #         moneyadd += 100
-            #         Upgrade_1 = Upgrades(0, 90, 650, 40, "Babiččin váleček Price :" + str(
-            #             round(upgrade1 / 10 ** n_counter(upgrade1)[0], 2)) + values[n_counter(upgrade1)[1]],
-            #                              "+1 Cookie per click", color_dark, color_light)
-
 
 
             # sušenka nahoru
