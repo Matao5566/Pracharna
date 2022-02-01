@@ -58,7 +58,7 @@ upgrade5 = 300
 money = 0
 font = pygame.font.Font('freesansbold.ttf', 32)
 moneyX = moneyY = 0
-moneyadd = 1
+moneyadd = 1000
 
 # Celkem prachy
 celkem = 0
@@ -177,7 +177,7 @@ class Upgrades:
             mouse_position = pygame.mouse.get_pos()
             display.blit(self.detail_surface, (mouse_position[0] + 16, mouse_position[1]))
 
-    def focus_check(self, mouse_position, mouse_click):
+    def focus_check(self, mouse_position):
         self.current = self.rect.collidepoint(mouse_position)
         return mouse_click if self.current else True
 
@@ -210,29 +210,28 @@ class Xbutton:
         self.current = self.rect.collidepoint(mouse_position)
         return mouse_click if self.current else True
 
-    def mouse_clicking(self, mouse_position):
-        if self.rect.collidepoint(mouse_position):
-            sus = True
-        else:
-            sus = False
-        return sus
-
-    def X10(self, upgrade, x, add, prachy, prachyadd):
+    def check(self, upgrade, x, prachy, multiplied, mouse_position):
         celkem = 0
-        for i in range(10):
-            celkem += upgrade
-            upgrade *= x
-        if prachy - celkem >= 0:
-            prachy -= celkem
-            prachyadd += 10*add
-            sus = True
-            return upgrade, prachy, prachyadd, sus
-        else:
-            sus = False
+        if self.rect.collidepoint(mouse_position):
+            for i in range(0, multiplied):
+                celkem += upgrade
+                upgrade *= x
+            if prachy - celkem >= 0:
+                sus = True
+            else:
+                sus = False
             return sus
 
-    def sus(self,sus):
-        if
+def done(upgrade, x, add, prachy, prachyadd, multiplied):
+    celkem = 0
+    for i in range(10):
+        celkem += upgrade
+        upgrade *= x
+    print(celkem)
+    prachy -= celkem
+    prachyadd += multiplied*add
+    return prachy, prachyadd, upgrade
+
 Upgrade_1 = Upgrades(0, 90, 650, 40, "Babiččin váleček", "+1 Cookie per click", color_dark, color_light, upgrade1)
 
 Upgrade_2 = Upgrades(0, 150, 650, 40, "Babiččina vařečka", "+10 Cookies per click", color_dark, color_light, upgrade2)
@@ -243,7 +242,7 @@ Upgrade_4 = Upgrades(0, 270, 650, 40, "Sušenkový božík", "+50% Cookies per c
 
 Upgrade_5 = Upgrades(0, 330, 650, 40, "Bába", "+1 Cookie per second", color_dark, color_light, upgrade5)
 
-X10 = Xbutton(800, 90, 40, 40, "10x", upgrade1, money, color_dark, color_light)
+X10_1 = Xbutton(660, 90, 60, 40, "10x", upgrade1, money, color_dark, color_light)
 
 
 def redraw():
@@ -257,22 +256,22 @@ def redraw():
 def update():
     Upgrade_1.button_show(screen)
     Upgrade_1.button_detail(screen)
-    Upgrade_1.focus_check(mouse_pos, mouse_click)
+    Upgrade_1.focus_check(mouse_pos)
     Upgrade_2.button_show(screen)
     Upgrade_2.button_detail(screen)
-    Upgrade_2.focus_check(mouse_pos, mouse_click)
+    Upgrade_2.focus_check(mouse_pos)
     Upgrade_3.button_show(screen)
     Upgrade_3.button_detail(screen)
-    Upgrade_3.focus_check(mouse_pos, mouse_click)
+    Upgrade_3.focus_check(mouse_pos)
     Upgrade_4.button_show(screen)
     Upgrade_4.button_detail(screen)
-    Upgrade_4.focus_check(mouse_pos, mouse_click)
+    Upgrade_4.focus_check(mouse_pos)
     Upgrade_5.button_show(screen)
     Upgrade_5.button_detail(screen)
-    Upgrade_5.focus_check(mouse_pos, mouse_click)
+    Upgrade_5.focus_check(mouse_pos)
     backtobakery()
-    X10.button_show(screen)
-    X10.press_check(mouse_pos)
+    X10_1.button_show(screen)
+    X10_1.press_check(mouse_pos)
     pygame.display.update()
 
 # Game Loop
@@ -303,12 +302,9 @@ while running:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_click = True
-            print(money)
 
-            if X10.mouse_clicking(mouse_pos) and (X10.X10(upgrade1, 1.2, 100, money, moneyadd)[3], bool):
-                upgrade1 = X10.X10(upgrade1, 1.2, 100, money, moneyadd)[0]
-                money = X10.X10(upgrade1, 1.2, 100, money, moneyadd)[1]
-                moneyadd = X10.X10(upgrade1, 1.2, 100, money, moneyadd)[2]
+            if X10_1.check(upgrade1, 1.2, money, 10, mouse_pos) and shop:
+                money, moneyadd, upgrade1 = done(upgrade1, 1.2, 100, money, moneyadd, 10)
                 Upgrade_1 = Upgrades(0, 90, 650, 40, "Babiččin váleček", "+1 Cookie per click", color_dark,
                                      color_light, upgrade1)
 
@@ -376,5 +372,4 @@ while running:
 
 
     mouse_click = False
-    Upgrade_1.focus_check(mouse_pos, mouse_click)
     pygame.display.update()
